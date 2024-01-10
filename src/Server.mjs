@@ -5,11 +5,13 @@ import clientRoutes from './routes/client.js';
 import { authorize } from './middleware/authorize.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser'; 
-
 //Db connection
 import connectDB from './utils/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { encryptDecryptMiddleware } from './middleware/encryptDecryptMiddleware.js';
+
+import swaggerSpec from './utils/config/swaggerConfig.js';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 
@@ -39,6 +41,11 @@ app.use(errorHandler);
 // app.use(encryptDecryptMiddleware)
 
 // Server listening on port 3000
+
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 connectDB()
     .then(() => {
         app.listen(PORT, () => {
